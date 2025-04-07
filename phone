@@ -1,0 +1,18 @@
+data_file="mydata.txt"
+tmp_file="tmp"
+
+if [ "$#" -eq 0 ]; then
+  echo "Usage: phone searchfor [...searchfor]"
+  echo "(You didn't tell me what you want to search for.)"
+fi
+
+egrep "$1" "$data_file" > "$tmp_file"
+
+shift
+for arg in "$@"; do
+  egrep -i "$arg" "$tmp_file" > tmp_filtered
+  mv tmp_filtered "$tmp_file"
+done
+
+awk -f display.awk "$tmp_file"
+rm -f "$tmp_file"
